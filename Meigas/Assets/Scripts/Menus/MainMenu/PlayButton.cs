@@ -14,4 +14,9 @@ public class PlayButton : MainMenuPanelButton {
         MenusInputController.deselectMainPanelButtons -= Deselect;
         MenusInputController.selectPlayButton -= Select;
     }
+
+    private void Start()
+    {
+        Select();
+    }
 }

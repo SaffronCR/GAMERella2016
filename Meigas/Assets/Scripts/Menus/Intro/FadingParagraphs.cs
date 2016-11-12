@@ -13,6 +13,8 @@ public class FadingParagraphs : MonoBehaviour {
     [SerializeField]
     private float timeShowingTextUntilGameStarts = 1f;
 
+    public TransitionBetweenScenes transitioner;
+
     public bool isPlayingIntro = false;
 
     private void Awake()
@@ -69,9 +71,7 @@ public class FadingParagraphs : MonoBehaviour {
             }
         }
 
-        yield return new WaitForSeconds(timeShowingTextUntilGameStarts);
-        isPlayingIntro = false;
-        //SceneManager.LoadScene("Game");
+        transitioner.TransitionToNewScene();
     }
 
 }

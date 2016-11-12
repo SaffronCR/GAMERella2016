@@ -40,11 +40,6 @@ public class MenusInputController : MonoBehaviour
     public delegate void SelectExitButton();
     public static event SelectExitButton selectExitButton;
 
-    private void Start()
-    {
-        selectPlayButton();
-    }
-
     private void Update()
     {
         switch (currentPanel)
@@ -74,7 +69,7 @@ public class MenusInputController : MonoBehaviour
 
             /*
             case mainPanels.ranking:
-                if (Input.GetKeyDown(KeyCode.X))
+                if (Input.GetKeyDown(KeyCode.X) || Input.GetKeyDown(KeyCode.Delete) || Input.GetKeyDown(KeyCode.Escape))
                 {
                     rankingPanel.SetActive(false);
                     mainMenuPanel.SetActive(true);
@@ -86,7 +81,7 @@ public class MenusInputController : MonoBehaviour
             */
 
             case mainPanels.how2play:
-                if (Input.GetKeyDown(KeyCode.X))
+                if (Input.GetKeyDown(KeyCode.X) || Input.GetKeyDown(KeyCode.Delete) || Input.GetKeyDown(KeyCode.Escape))
                 {
                     howToPlayPanel.SetActive(false);
                     mainMenuPanel.SetActive(true);
