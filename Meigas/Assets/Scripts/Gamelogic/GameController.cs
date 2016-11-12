@@ -2,15 +2,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public enum SpellType
 {
-  //Espirito,
-
   Ar,
   Agua,
   Terra,
   Fogo,
+  //Espirito,
 }
 
 public enum Difficulty
@@ -46,7 +46,7 @@ public class GameRules
 }
 
 [Serializable]
-public class SpellTypeDifficulty
+public class SpellTypeWeight
 {
   public SpellType spellType;
   public float weight;
@@ -56,13 +56,18 @@ public class GameController : MonoBehaviour
 {
   #region public variables
 
-  public PlayerController m_playerCtrl = null;
-  public RivalController m_rivalCtrl = null;
+  public GameObject m_spellArrowUp = null;
+  public GameObject m_spellArrowDown = null;
+  public GameObject m_spellArrowLeft = null;
+  public GameObject m_spellArrowRight = null;
+
+  public Text m_textSouls = null;
+  public Text m_textTimer = null;
 
   public float m_roundTime = 0.0f;
   public GameRules[] m_gamerules = null;
 
-  public SpellTypeDifficulty[] m_spellTypeDifficulty = new SpellTypeDifficulty[sizeof(SpellType)];
+  public SpellTypeWeight[] m_spellTypeWeight = new SpellTypeWeight[sizeof(SpellType)];
 
   [NonSerialized]
   public SpellCombo m_currentSpell = null;
@@ -102,6 +107,8 @@ public class GameController : MonoBehaviour
     m_currentScore++;
 
     m_currentSpell = null;
+
+    m_textSouls.text = m_currentScore.ToString();
   }
 
   public void SetLowerDifficulty()
@@ -124,9 +131,9 @@ public class GameController : MonoBehaviour
   private void Start()
   {
     // Get the total weight for calculating random type of spell later.
-    foreach (SpellTypeDifficulty spellDiff in m_spellTypeDifficulty)
+    foreach (SpellTypeWeight spell in m_spellTypeWeight)
     {
-      m_spellTypeTotalWeight += spellDiff.weight;
+      m_spellTypeTotalWeight += spell.weight;
     }
 
     InitRound();
@@ -158,6 +165,8 @@ public class GameController : MonoBehaviour
 
     if (m_gamerules.Length > m_currentDifficulty)
       m_currentGR = m_gamerules[m_currentDifficulty];
+
+    m_textTimer.text = m_roundTime.ToString();
   }
 
   private void EndRound()
@@ -170,6 +179,9 @@ public class GameController : MonoBehaviour
   {
     if (m_currentGR != null)
     {
+      // Update UI time.
+      m_textTimer.text = ((int)m_currentRoundTime).ToString();
+
       // Create spell the first time.
       if (m_currentSpell == null)
       {
@@ -210,7 +222,7 @@ public class GameController : MonoBehaviour
       {
         for (int i = 0; i < m_currentGR.maxSpellCount; i++)
         {
-          float result = UnityEngine.Random.Range(0.0f, 100.0f);
+          float result = UnityEngine.Random.Range(0.0f, 99.0f);
 
           if (result < 25.0f) m_currentSpell.keyCodes.Add(KeyCode.UpArrow);
           else if (result < 50.0f) m_currentSpell.keyCodes.Add(KeyCode.DownArrow);
@@ -219,10 +231,10 @@ public class GameController : MonoBehaviour
         }
 
         Debug.Log("Spell: " + m_currentSpell.spellType);
-        //foreach (KeyCode code in m_currentSpell.keyCodes)
-        //{
-        //  Debug.Log("Key: " + code);
-        //}
+        foreach (KeyCode code in m_currentSpell.keyCodes)
+        {
+          Debug.Log("Key: " + code);
+        }
       }
     }
   }
@@ -234,12 +246,12 @@ public class GameController : MonoBehaviour
 
     float randomWeight = UnityEngine.Random.Range(0.0f, m_spellTypeTotalWeight);
 
-    foreach (SpellTypeDifficulty spellDiff in m_spellTypeDifficulty)
+    foreach (SpellTypeWeight spell in m_spellTypeWeight)
     {
-      currentWeight += spellDiff.weight;
+      currentWeight += spell.weight;
       if (randomWeight <= currentWeight)
       {
-        result = spellDiff.spellType;
+        result = spell.spellType;
         break;
       }
     }
