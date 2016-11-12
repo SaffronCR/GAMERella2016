@@ -2,36 +2,31 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class FadeImage : MonoBehaviour {
+public class BlinkingText : MonoBehaviour {
 
+    private Text thisText;
     [SerializeField]
     private float timeTakenDuringLerp = 2f;
-    [SerializeField]
-    private float timeShowingTextUntilGameStarts = 1f;
-
-    public Image fadingImage;
 
     private void Awake()
     {
-        fadingImage = this.GetComponent<Image>();
+        thisText = this.GetComponent<Text>();
     }
 
-	public void FadeOut()
+	private void Start () {
+        StartCoroutine(BlinkingTextCoroutine());	
+	}
+
+    private IEnumerator BlinkingTextCoroutine()
     {
-        StartCoroutine(FadeCoroutine(1f));
-    }
-	
-    public void FadeIn()
-    {
-        StartCoroutine(FadeCoroutine(0f));
+        while (true)
+        {
+            yield return FadeCoroutine(0f);
+            yield return FadeCoroutine(0.8f);
+        }
     }
 
-    public void CustomFade(float alpha)
-    {
-        StartCoroutine(FadeCoroutine(alpha));
-    }
-
-    protected virtual IEnumerator FadeCoroutine(float endingImageAlpha)
+    private IEnumerator FadeCoroutine(float endingImageAlpha)
     {
         bool isLerping = true;
         float _timeStartedLerping = Time.time;
@@ -41,11 +36,11 @@ public class FadeImage : MonoBehaviour {
             float timeSinceStarted = Time.time - _timeStartedLerping;
             float percentageComplete = timeSinceStarted / timeTakenDuringLerp;
 
-            Color _color = fadingImage.color;
+            Color _color = thisText.color;
 
             _color.a = Mathf.Lerp(_color.a, endingImageAlpha, percentageComplete);
 
-            fadingImage.color = _color;
+            thisText.color = _color;
 
             if (percentageComplete >= 1f)
             {
@@ -55,5 +50,4 @@ public class FadeImage : MonoBehaviour {
             yield return null;
         }
     }
-
 }
