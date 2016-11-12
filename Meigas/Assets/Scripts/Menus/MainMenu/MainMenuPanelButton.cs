@@ -2,23 +2,14 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public abstract class MainMenuPanelButton : MonoBehaviour
-{
+public abstract class MainMenuPanelButton : MonoBehaviour{
 
     protected Text text;
     protected string originalText;
-    public Color deselectedColor;
-    public Color selectedColor;
+    public Color deselectedColor = Color.black;
+    public Color selectedColor = Color.white;
 
-    protected void OnEnable()
-    {
-
-    }
-
-    protected void OnDisable()
-    {
-
-    }
+    
 
     private void Awake()
     {
@@ -31,18 +22,21 @@ public abstract class MainMenuPanelButton : MonoBehaviour
         text.color = deselectedColor;
     }
 
-    private void Select()
+    protected void Select()
     {
         text.text = "> " + text.text;
         text.color = selectedColor;
     }
 
-    private void Deselect()
+    protected void Deselect()
     {
         text.text = originalText;
         text.color = deselectedColor;
     }
 
-    protected abstract void OnPress();
-
+    //Just in case animations for the buttons will be implemented
+    protected void OnPress()
+    {
+        //...
+    }
 }
