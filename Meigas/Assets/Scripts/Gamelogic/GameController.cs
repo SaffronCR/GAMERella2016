@@ -160,7 +160,9 @@ public class GameController : MonoBehaviour
   {
     // Update time.
     m_currentRoundTime -= Time.deltaTime;
+    m_currentRoundTime = Mathf.Clamp(m_currentRoundTime, 0.0f, m_roundTime);
 
+    // Update round logic.
     if (m_currentRoundTime <= 0.0f)
     {
       EndRound();
@@ -190,6 +192,8 @@ public class GameController : MonoBehaviour
   private void EndRound()
   {
     //TODO.
+    m_currentSpell = null;
+
     Debug.Log("EndRound");
   }
 
