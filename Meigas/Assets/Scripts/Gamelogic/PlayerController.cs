@@ -22,7 +22,7 @@ public class PlayerController : MonoBehaviour
   {
     if (m_gameCtrl != null && m_gameCtrl.m_currentSpell != null)
     {
-      if (Input.GetKeyDown(m_gameCtrl.m_currentSpell.keyCodes[m_currentKeyIndex]))
+      if (IsCorrectKeyDown())
       {
         m_currentKeyIndex++;
 
@@ -37,6 +37,48 @@ public class PlayerController : MonoBehaviour
         m_gameCtrl.AddTimePenalty();
       }
     }
+  }
+
+  private bool IsCorrectKeyDown()
+  {
+    bool result = false;
+
+    switch (m_gameCtrl.m_currentSpell.spellType)
+    {
+      // Repeat.
+      case SpellType.Ar:
+        result = Input.GetKeyDown(m_gameCtrl.m_currentSpell.keyCodes[m_currentKeyIndex]);
+        break;
+
+      // Mirror.
+      case SpellType.Terra:
+        result = Input.GetKeyDown(m_gameCtrl.m_currentSpell.keyCodes[m_gameCtrl.m_currentSpell.keyCodes.Count - m_currentKeyIndex - 1]);
+        break;
+
+      // Opposite.
+      case SpellType.Agua:
+        result = GetOppositeKeyDown(m_gameCtrl.m_currentSpell.keyCodes[m_currentKeyIndex]);
+        break;
+
+      // Mirror+Opposite
+      case SpellType.Fogo:
+        result = GetOppositeKeyDown(m_gameCtrl.m_currentSpell.keyCodes[m_gameCtrl.m_currentSpell.keyCodes.Count - m_currentKeyIndex - 1]);
+        break;
+    }
+
+    return result;
+  }
+
+  private bool GetOppositeKeyDown(KeyCode code)
+  {
+    bool result = false;
+
+    if (code == KeyCode.UpArrow) result = Input.GetKeyDown(KeyCode.DownArrow);
+    else if (code == KeyCode.DownArrow) result = Input.GetKeyDown(KeyCode.UpArrow);
+    else if (code == KeyCode.LeftArrow) result = Input.GetKeyDown(KeyCode.RightArrow);
+    else result = Input.GetKeyDown(KeyCode.LeftArrow);
+
+    return result;
   }
 
   private bool AnyKeyDown()

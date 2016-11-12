@@ -5,11 +5,10 @@ using UnityEngine;
 
 public enum SpellType
 {
-  Espirito,
+  //Espirito,
 
-  //  Ar,
+  Ar,
   Agua,
-
   Terra,
   Fogo,
 }
@@ -189,7 +188,7 @@ public class GameController : MonoBehaviour
 
       m_currentSpell.spellType = (SpellType)UnityEngine.Random.Range(0, Enum.GetNames(typeof(SpellType)).Length);
 
-      //if (m_currentSpell.spellType != SpellType.Ar)
+      //if (m_currentSpell.spellType != SpellType.Espirito)
       {
         for (int i = 0; i < m_currentGR.maxSpellCount; i++)
         {
