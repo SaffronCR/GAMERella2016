@@ -34,6 +34,7 @@ public class GameRules
 
   public float timeToCastSpell;
   public float timeToCastHordeSpell;
+  public float timeOff;
 
   public int hordeCount;
 
@@ -72,14 +73,17 @@ public class GameController : MonoBehaviour
   [NonSerialized]
   public SpellCombo m_currentSpell = null;
 
+  [NonSerialized]
+  public GameRules m_currentGR = null;
+
   #endregion public variables
 
   #region private variables
 
   private float m_currentRoundTime = 0.0f;
-  private GameRules m_currentGR = null;
-  private int m_currentScore = 0;
+  private float m_currentTimeOff = 0.0f;
 
+  private int m_currentScore = 0;
   private int m_currentDifficulty = 0;
 
   private float m_spellTypeTotalWeight = 0.0f;
@@ -97,6 +101,8 @@ public class GameController : MonoBehaviour
       m_currentRoundTime -= m_currentGR.timePunishment;
     }
 
+    SetTimeOff();
+
     m_currentSpell = null;
   }
 
@@ -105,6 +111,8 @@ public class GameController : MonoBehaviour
     Debug.Log("AddScore");
 
     m_currentScore++;
+
+    SetTimeOff();
 
     m_currentSpell = null;
 
@@ -126,6 +134,14 @@ public class GameController : MonoBehaviour
   #endregion public methods
 
   #region private methods
+
+  private void SetTimeOff()
+  {
+    if (m_currentGR != null)
+    {
+      m_currentTimeOff = Time.time + m_currentGR.timeOff;
+    }
+  }
 
   // Use this for initialization
   private void Start()
@@ -167,6 +183,8 @@ public class GameController : MonoBehaviour
       m_currentGR = m_gamerules[m_currentDifficulty];
 
     m_textTimer.text = m_roundTime.ToString();
+
+    SetTimeOff();
   }
 
   private void EndRound()
@@ -182,22 +200,26 @@ public class GameController : MonoBehaviour
       // Update UI time.
       m_textTimer.text = ((int)m_currentRoundTime).ToString();
 
-      // Create spell the first time.
-      if (m_currentSpell == null)
+      // Give player some rest between spells!
+      if (Time.time > m_currentTimeOff)
       {
-        CreateNewSpell();
-      }
-
-      // Update spell.
-      if (m_currentSpell != null)
-      {
-        if (m_currentSpell.initialTime + m_currentGR.timeToCastSpell <= Time.time)
+        // Create spell the first time.
+        if (m_currentSpell == null)
         {
-          AddTimePenalty();
+          CreateNewSpell();
         }
-      }
 
-      // Update many many things TODO.
+        // Update spell.
+        if (m_currentSpell != null)
+        {
+          if (m_currentSpell.initialTime + m_currentGR.timeToCastSpell <= Time.time)
+          {
+            AddTimePenalty();
+          }
+        }
+
+        // Update many many things TODO.
+      }
     }
     else
     {

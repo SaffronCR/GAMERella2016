@@ -37,6 +37,10 @@ public class PlayerController : MonoBehaviour
         m_gameCtrl.AddTimePenalty();
       }
     }
+    else
+    {
+      m_currentKeyIndex = 0;
+    }
   }
 
   private bool IsCorrectKeyDown()

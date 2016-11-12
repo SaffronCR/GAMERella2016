@@ -8,6 +8,7 @@ public class RivalController : MonoBehaviour
   public Transform[] m_spellPositions = null;
 
   public GameObject[] m_signs = null;
+  public GameObject[] m_signsHelp = null;
 
   private SpellCombo m_currentSpell = null;
   private int m_currentSpellIndex = 0;
@@ -23,20 +24,18 @@ public class RivalController : MonoBehaviour
     if (m_gameCtrl != null)
     {
       // Update current spell.
-      if (m_gameCtrl.m_currentSpell != null && m_currentSpell != m_gameCtrl.m_currentSpell)
+      if (m_gameCtrl.m_currentSpell == null)
       {
-        // Initialize spell arrows variables.
-        m_currentSpellIndex = 0;
-        m_currentSpell = m_gameCtrl.m_currentSpell;
-
         // Hide all signs.
         foreach (GameObject sign in m_signs)
         {
           sign.SetActive(false);
         }
 
-        // Set active current sign.
-        m_signs[(int)m_currentSpell.spellType].SetActive(true);
+        foreach (GameObject sign in m_signsHelp)
+        {
+          sign.SetActive(false);
+        }
 
         // Delete previous spell arrows.
         foreach (Transform position in m_spellPositions)
@@ -46,6 +45,20 @@ public class RivalController : MonoBehaviour
             GameObject.Destroy(child.gameObject);
           }
         }
+      }
+
+      if (m_gameCtrl.m_currentSpell != null && m_currentSpell != m_gameCtrl.m_currentSpell)
+      {
+        // Initialize spell arrows variables.
+        m_currentSpellIndex = 0;
+        m_currentSpell = m_gameCtrl.m_currentSpell;
+
+        // Set active current sign.
+        m_signs[(int)m_currentSpell.spellType].SetActive(true);
+
+        // Set active current sign help, if the current game rules allows it.
+        if (m_gameCtrl.m_currentGR.showSpellHelp)
+          m_signsHelp[(int)m_currentSpell.spellType].SetActive(true);
       }
 
       // Draw spell.
