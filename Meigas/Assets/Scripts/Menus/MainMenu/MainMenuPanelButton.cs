@@ -4,38 +4,34 @@ using System.Collections;
 
 public abstract class MainMenuPanelButton : MonoBehaviour{
 
-    protected Text text;
-    protected string originalText;
-    public Color deselectedColor = Color.black;
+    protected Image image;
+    public Color deselectedColor = Color.white;
     public Color selectedColor = Color.white;
 
     
 
     private void Awake()
     {
-        text = this.GetComponent<Text>();
+        image = this.GetComponent<Image>();
     }
 
     private void Start()
     {
-        originalText = text.text;
-        text.color = deselectedColor;
+        image.color = deselectedColor;
     }
 
     protected void Select()
     {
-        text.text = "> " + text.text;
-        text.color = selectedColor;
+        image.color = selectedColor;
     }
 
     protected void Deselect()
     {
-        text.text = originalText;
-        text.color = deselectedColor;
+        image.color = deselectedColor;
     }
 
     //Just in case animations for the buttons will be implemented
-    protected void OnPress()
+    protected virtual void OnPress()
     {
         //...
     }

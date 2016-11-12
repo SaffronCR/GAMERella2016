@@ -8,31 +8,31 @@ public class MenusInputController : MonoBehaviour
     public enum mainPanels
     {
         main,
-        ranking,
+        //ranking,
         how2play
     }
 
     private mainPanels currentPanel = mainPanels.main;
     private int mainPanelIndex = 0;
-    private int mainPanelButtonsLength = 4;
-    private string moveAndSelect;
-    private string goBack;
+    [SerializeField]
+    private int mainPanelButtonsLength = 3;
 
     public GameObject mainMenuPanel;
     public GameObject creditsPanel;
-    public GameObject buttonsPanel;
-    public GameObject rankingPanel;
+    public GameObject instructionsPanel;
+    //public GameObject rankingPanel;
     public GameObject howToPlayPanel;
+    public GameObject transitionImage;
 
 
     public delegate void DeselectMainPanelButtons();
     public static event DeselectMainPanelButtons deselectMainPanelButtons;
 
-    public delegate void SelectNewGameButton();
-    public static event SelectNewGameButton selectNewGameButton;
+    public delegate void SelectPlayButton();
+    public static event SelectPlayButton selectPlayButton;
 
-    public delegate void SelectRankingButton();
-    public static event SelectRankingButton selectRankingButton;
+    //public delegate void SelectRankingButton();
+    //public static event SelectRankingButton selectRankingButton;
 
     public delegate void SelectHowToPlayButton();
     public static event SelectHowToPlayButton selectHowToPlayButton;
@@ -40,20 +40,9 @@ public class MenusInputController : MonoBehaviour
     public delegate void SelectExitButton();
     public static event SelectExitButton selectExitButton;
 
-    public delegate void UpdateButtonPanelText(string newText);
-    public static event UpdateButtonPanelText updateButtonPanelText;
-
-    private void Awake()
-    {
-
-    }
-
     private void Start()
     {
-        moveAndSelect = "Up/Down: Move selection    Z: Accept";
-        goBack = "X: Back";
-        updateButtonPanelText(moveAndSelect);
-        selectNewGameButton();
+        selectPlayButton();
     }
 
     private void Update()
@@ -83,6 +72,7 @@ public class MenusInputController : MonoBehaviour
                 }
                 break;
 
+            /*
             case mainPanels.ranking:
                 if (Input.GetKeyDown(KeyCode.X))
                 {
@@ -93,6 +83,7 @@ public class MenusInputController : MonoBehaviour
                     currentPanel = mainPanels.main;
                 }
                 break;
+            */
 
             case mainPanels.how2play:
                 if (Input.GetKeyDown(KeyCode.X))
@@ -100,7 +91,6 @@ public class MenusInputController : MonoBehaviour
                     howToPlayPanel.SetActive(false);
                     mainMenuPanel.SetActive(true);
                     creditsPanel.SetActive(true);
-                    updateButtonPanelText(moveAndSelect);
                     currentPanel = mainPanels.main;
                 }
                 break;
@@ -116,15 +106,12 @@ public class MenusInputController : MonoBehaviour
         switch (value)
         {
             case 0:
-                selectNewGameButton();
+                selectPlayButton();
                 break;
             case 1:
-                selectRankingButton();
-                break;
-            case 2:
                 selectHowToPlayButton();
                 break;
-            case 3:
+            case 2:
                 selectExitButton();
                 break;
             default:
@@ -137,25 +124,16 @@ public class MenusInputController : MonoBehaviour
         switch (value)
         {
             case 0:
-                //Not yet implemented
-                //SceneManager.LoadScene("Intro");
+                transitionImage.GetComponent<TransitionBetweenScenes>().TransitionToNewScene();
                 break;
             case 1:
-                mainMenuPanel.SetActive(false);
-                creditsPanel.SetActive(false);
-                rankingPanel.SetActive(true);
-                updateButtonPanelText(goBack);
-                currentPanel = mainPanels.ranking;
+                //mainMenuPanel.SetActive(false);
+                //creditsPanel.SetActive(false);
+                //howToPlayPanel.SetActive(true);
+                //currentPanel = mainPanels.how2play;
                 break;
             case 2:
-                mainMenuPanel.SetActive(false);
-                creditsPanel.SetActive(false);
-                howToPlayPanel.SetActive(true);
-                updateButtonPanelText(goBack);
-                currentPanel = mainPanels.how2play;
-                break;
-            case 3:
-                //Application.Quit();
+                Application.Quit();
                 break;
             default:
                 break;
