@@ -45,6 +45,13 @@ public class GameRules
   public bool showSpellHelp;
 }
 
+[Serializable]
+public class SpellTypeDifficulty
+{
+  public SpellType spellType;
+  public float weight;
+}
+
 public class GameController : MonoBehaviour
 {
   #region public variables
@@ -54,6 +61,8 @@ public class GameController : MonoBehaviour
 
   public float m_roundTime = 0.0f;
   public GameRules[] m_gamerules = null;
+
+  public SpellTypeDifficulty[] m_spellTypeDifficulty = new SpellTypeDifficulty[sizeof(SpellType)];
 
   [NonSerialized]
   public SpellCombo m_currentSpell = null;
@@ -67,6 +76,8 @@ public class GameController : MonoBehaviour
   private int m_currentScore = 0;
 
   private int m_currentDifficulty = 0;
+
+  private float m_spellTypeTotalWeight = 0.0f;
 
   #endregion private variables
 
@@ -112,6 +123,12 @@ public class GameController : MonoBehaviour
   // Use this for initialization
   private void Start()
   {
+    // Get the total weight for calculating random type of spell later.
+    foreach (SpellTypeDifficulty spellDiff in m_spellTypeDifficulty)
+    {
+      m_spellTypeTotalWeight += spellDiff.weight;
+    }
+
     InitRound();
   }
 
@@ -186,7 +203,8 @@ public class GameController : MonoBehaviour
 
       m_currentSpell.initialTime = Time.time;
 
-      m_currentSpell.spellType = (SpellType)UnityEngine.Random.Range(0, Enum.GetNames(typeof(SpellType)).Length);
+      //m_currentSpell.spellType = (SpellType)UnityEngine.Random.Range(0, Enum.GetNames(typeof(SpellType)).Length);
+      m_currentSpell.spellType = RandomNewSpellType();
 
       //if (m_currentSpell.spellType != SpellType.Espirito)
       {
@@ -201,12 +219,32 @@ public class GameController : MonoBehaviour
         }
 
         Debug.Log("Spell: " + m_currentSpell.spellType);
-        foreach (KeyCode code in m_currentSpell.keyCodes)
-        {
-          Debug.Log("Key: " + code);
-        }
+        //foreach (KeyCode code in m_currentSpell.keyCodes)
+        //{
+        //  Debug.Log("Key: " + code);
+        //}
       }
     }
+  }
+
+  private SpellType RandomNewSpellType()
+  {
+    SpellType result = SpellType.Ar;
+    float currentWeight = 0.0f;
+
+    float randomWeight = UnityEngine.Random.Range(0.0f, m_spellTypeTotalWeight);
+
+    foreach (SpellTypeDifficulty spellDiff in m_spellTypeDifficulty)
+    {
+      currentWeight += spellDiff.weight;
+      if (randomWeight <= currentWeight)
+      {
+        result = spellDiff.spellType;
+        break;
+      }
+    }
+
+    return result;
   }
 
   #endregion private methods
