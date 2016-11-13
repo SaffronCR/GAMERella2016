@@ -41,7 +41,7 @@ public class MenusInputController : MonoBehaviour
 
     private void Start()
     {
-        SoundManager.PlaySound("CelticMusicLegend", true, 0.4f);
+        SoundManager.PlaySound("night-forest", true);
     }
 
     private void Update()
