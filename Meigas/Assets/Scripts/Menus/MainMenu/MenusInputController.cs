@@ -8,19 +8,18 @@ public class MenusInputController : MonoBehaviour
     public enum mainPanels
     {
         main,
-        //ranking,
+        credits,
         how2play
     }
 
     private mainPanels currentPanel = mainPanels.main;
     private int mainPanelIndex = 0;
     [SerializeField]
-    private int mainPanelButtonsLength = 3;
+    private int mainPanelButtonsLength = 4;
 
     public GameObject titleImage;
     public GameObject mainMenuPanel;
     public GameObject creditsPanel;
-    //public GameObject rankingPanel;
     public GameObject howToPlayPanel;
     public GameObject transitionImage;
 
@@ -30,8 +29,8 @@ public class MenusInputController : MonoBehaviour
     public delegate void SelectPlayButton();
     public static event SelectPlayButton selectPlayButton;
 
-    //public delegate void SelectRankingButton();
-    //public static event SelectRankingButton selectRankingButton;
+    public delegate void SelectCreditsButton();
+    public static event SelectCreditsButton selectCreditsButton;
 
     public delegate void SelectHowToPlayButton();
     public static event SelectHowToPlayButton selectHowToPlayButton;
@@ -73,27 +72,25 @@ public class MenusInputController : MonoBehaviour
                 }
                 break;
 
-            /*
-            case mainPanels.ranking:
+            case mainPanels.credits:
                 if (Input.GetKeyDown(KeyCode.X) || Input.GetKeyDown(KeyCode.Delete) || Input.GetKeyDown(KeyCode.Escape))
                 {
-                    rankingPanel.SetActive(false);
+                    SoundManager.PlaySound("menu-move-button");
+                    creditsPanel.SetActive(false);
+                    titleImage.SetActive(true);
                     mainMenuPanel.SetActive(true);
-                    creditsPanel.SetActive(true);
-                    updateButtonPanelText(moveAndSelect);
                     currentPanel = mainPanels.main;
                 }
                 break;
-            */
 
             case mainPanels.how2play:
                 if (Input.GetKeyDown(KeyCode.X) || Input.GetKeyDown(KeyCode.Delete) || Input.GetKeyDown(KeyCode.Escape))
                 {
                     SoundManager.PlaySound("menu-move-button");
                     howToPlayPanel.SetActive(false);
+                    creditsPanel.SetActive(false);
                     titleImage.SetActive(true);
                     mainMenuPanel.SetActive(true);
-                    creditsPanel.SetActive(true);
                     currentPanel = mainPanels.main;
                 }
                 break;
@@ -115,6 +112,9 @@ public class MenusInputController : MonoBehaviour
                 selectHowToPlayButton();
                 break;
             case 2:
+                selectCreditsButton();
+                break;
+            case 3:
                 selectExitButton();
                 break;
             default:
@@ -139,6 +139,14 @@ public class MenusInputController : MonoBehaviour
                 currentPanel = mainPanels.how2play;
                 break;
             case 2:
+                SoundManager.PlaySound("menu-move-button");
+                titleImage.SetActive(false);
+                mainMenuPanel.SetActive(false);
+                howToPlayPanel.SetActive(false);
+                creditsPanel.SetActive(true);
+                currentPanel = mainPanels.credits;
+                break;
+            case 3:
                 //SoundManager.PlaySound("menu-move-button");
                 Application.Quit();
                 break;
