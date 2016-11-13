@@ -5,13 +5,13 @@ public static class SoundManager {
     
     private static string soundsPath = "Sound/";
 
-	public static void PlaySound(string soundName, bool loop = false)
+	public static void PlaySound(string soundName, bool loop = false, float volume = 1f)
     {
         AudioClip _clip = Resources.Load<AudioClip>(soundsPath + soundName);
-        PlaySound(_clip, loop);
+        PlaySound(_clip, loop, volume);
     }
 
-    public static void PlaySound(AudioClip sound, bool loop = false)
+    public static void PlaySound(AudioClip sound, bool loop = false, float volume = 1f)
     {
         GameObject _newSoundObject = new GameObject(sound.name);
         _newSoundObject.transform.position = Vector2.zero;
@@ -20,6 +20,7 @@ public static class SoundManager {
         AudioSource _audioSource = _newSoundObject.AddComponent<AudioSource>();
         _audioSource.playOnAwake = true;
         _audioSource.clip = sound;
+        _audioSource.volume = volume;
 
         if (loop)
         {
@@ -31,26 +32,6 @@ public static class SoundManager {
         }
 
         GameObject.Instantiate(_newSoundObject);
-    }
-
-    public static void PlayMusic(string musicName, bool loop = false)
-    {
-        PlaySound(musicName, loop);
-    }
-
-    public static void PlayMusic(AudioClip music, bool loop = false)
-    {
-        PlaySound(music, loop);
-    }
-
-    public static void PlaySFX(string sfxName)
-    {
-        PlaySound(sfxName, false);
-    }
-
-    public static void PlaySFX(AudioClip sfx)
-    {
-        PlaySound(sfx, false);
     }
 
     public static void StopSound(string soundName)
