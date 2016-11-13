@@ -75,6 +75,9 @@ public class GameController : MonoBehaviour
   public AudioSource m_spellRightSound = null;
   public AudioSource m_spellFailSound = null;
 
+  public Animator m_bruxaAnim = null;
+  public Animator m_meigaAnim = null;
+
   [NonSerialized]
   public SpellCombo m_currentSpell = null;
 
@@ -104,6 +107,9 @@ public class GameController : MonoBehaviour
   {
     Debug.Log("AddTimePenalty");
 
+    m_meigaAnim.SetTrigger("Attack");
+    m_bruxaAnim.SetTrigger("Hit");
+
     if (m_spellFailSound != null)
       m_spellFailSound.Play();
 
@@ -127,6 +133,9 @@ public class GameController : MonoBehaviour
   public void AddScore()
   {
     Debug.Log("AddScore");
+
+    m_bruxaAnim.SetTrigger("Attack");
+    m_meigaAnim.SetTrigger("Hit");
 
     if (m_spellRightSound != null)
       m_spellRightSound.Play();
@@ -230,9 +239,9 @@ public class GameController : MonoBehaviour
 
     Debug.Log("EndRound");
 
-    if(m_currentRoundTime <= 0f)
+    if (m_currentRoundTime <= 0f)
     {
-        transitionBetweenScenes.TransitionToNewScene();
+      transitionBetweenScenes.TransitionToNewScene();
     }
   }
 
