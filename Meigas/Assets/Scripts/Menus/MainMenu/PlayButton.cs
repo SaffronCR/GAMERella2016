@@ -1,18 +1,22 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class NewGameButton : MainMenuPanelButton
-{
+public class PlayButton : MainMenuPanelButton {
 
     protected void OnEnable()
     {
         MenusInputController.deselectMainPanelButtons += Deselect;
-        MenusInputController.selectNewGameButton += Select;
+        MenusInputController.selectPlayButton += Select;
     }
 
     protected void OnDisable()
     {
         MenusInputController.deselectMainPanelButtons -= Deselect;
-        MenusInputController.selectNewGameButton -= Select;
+        MenusInputController.selectPlayButton -= Select;
+    }
+
+    private void Start()
+    {
+        Select();
     }
 }
