@@ -224,6 +224,8 @@ public class GameController : MonoBehaviour
     //TODO.
     m_currentSpell = null;
 
+    PlayerPrefs.SetFloat("score", m_currentScore);
+
     Debug.Log("EndRound");
   }
 
