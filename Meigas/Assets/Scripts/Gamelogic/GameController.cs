@@ -70,6 +70,9 @@ public class GameController : MonoBehaviour
 
   public SpellTypeWeight[] m_spellTypeWeight = new SpellTypeWeight[sizeof(SpellType)];
 
+  public AudioSource m_spellRightSound = null;
+  public AudioSource m_spellFailSound = null;
+
   [NonSerialized]
   public SpellCombo m_currentSpell = null;
 
@@ -88,6 +91,9 @@ public class GameController : MonoBehaviour
 
   private float m_spellTypeTotalWeight = 0.0f;
 
+  private int m_rightCounter = 0;
+  private int m_wrongCounter = 0;
+
   #endregion private variables
 
   #region public methods
@@ -95,6 +101,16 @@ public class GameController : MonoBehaviour
   public void AddTimePenalty()
   {
     Debug.Log("AddTimePenalty");
+
+    if (m_spellFailSound != null)
+      m_spellFailSound.Play();
+
+    m_rightCounter = 0;
+    m_wrongCounter++;
+    if (m_wrongCounter > 5)
+    {
+      SetLowerDifficulty();
+    }
 
     if (m_currentGR != null)
     {
@@ -110,6 +126,16 @@ public class GameController : MonoBehaviour
   {
     Debug.Log("AddScore");
 
+    if (m_spellRightSound != null)
+      m_spellRightSound.Play();
+
+    m_wrongCounter = 0;
+    m_rightCounter++;
+    if (m_rightCounter > 5)
+    {
+      SetHigherDifficulty();
+    }
+
     m_currentScore++;
 
     SetTimeOff();
@@ -123,12 +149,16 @@ public class GameController : MonoBehaviour
   {
     if (m_currentDifficulty > 0)
       m_currentDifficulty--;
+
+    m_currentGR = m_gamerules[m_currentDifficulty];
   }
 
   public void SetHigherDifficulty()
   {
     if (m_currentDifficulty < m_gamerules.Length - 1)
       m_currentDifficulty++;
+
+    m_currentGR = m_gamerules[m_currentDifficulty];
   }
 
   #endregion public methods

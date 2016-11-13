@@ -10,6 +10,8 @@ public class RivalController : MonoBehaviour
   public GameObject[] m_signs = null;
   public GameObject[] m_signsHelp = null;
 
+  public AudioSource m_spellSound = null;
+
   private SpellCombo m_currentSpell = null;
   private int m_currentSpellIndex = 0;
 
@@ -45,6 +47,13 @@ public class RivalController : MonoBehaviour
             GameObject.Destroy(child.gameObject);
           }
         }
+
+        // Prevent any spell arrow from showing.
+        StopAllCoroutines();
+
+        // Stop spell sound.
+        if (m_spellSound != null)
+          m_spellSound.Stop();
       }
 
       if (m_gameCtrl.m_currentSpell != null && m_currentSpell != m_gameCtrl.m_currentSpell)
@@ -59,32 +68,48 @@ public class RivalController : MonoBehaviour
         // Set active current sign help, if the current game rules allows it.
         if (m_gameCtrl.m_currentGR.showSpellHelp)
           m_signsHelp[(int)m_currentSpell.spellType].SetActive(true);
+
+        // Play spell sound.
+        if (m_spellSound != null)
+          m_spellSound.Play();
       }
 
       // Draw spell.
-      if (m_currentSpell != null && m_currentSpellIndex < m_currentSpell.keyCodes.Count)
+      while (m_currentSpell != null && m_currentSpellIndex < m_currentSpell.keyCodes.Count)
       {
+        IEnumerator coroutine = null;
+
         switch (m_currentSpell.keyCodes[m_currentSpellIndex])
         {
           case KeyCode.UpArrow:
-            Instantiate(m_gameCtrl.m_spellArrowUp, m_spellPositions[m_currentSpellIndex], false);
+            coroutine = CreateArrow(m_gameCtrl.m_spellArrowUp, m_currentSpellIndex);
             break;
 
           case KeyCode.DownArrow:
-            Instantiate(m_gameCtrl.m_spellArrowDown, m_spellPositions[m_currentSpellIndex], false);
+            coroutine = CreateArrow(m_gameCtrl.m_spellArrowDown, m_currentSpellIndex);
             break;
 
           case KeyCode.LeftArrow:
-            Instantiate(m_gameCtrl.m_spellArrowLeft, m_spellPositions[m_currentSpellIndex], false);
+            coroutine = CreateArrow(m_gameCtrl.m_spellArrowLeft, m_currentSpellIndex);
             break;
 
           case KeyCode.RightArrow:
-            Instantiate(m_gameCtrl.m_spellArrowRight, m_spellPositions[m_currentSpellIndex], false);
+            coroutine = CreateArrow(m_gameCtrl.m_spellArrowRight, m_currentSpellIndex);
             break;
         }
+
+        if (coroutine != null)
+          StartCoroutine(coroutine);
 
         m_currentSpellIndex++;
       }
     }
+  }
+
+  private IEnumerator CreateArrow(GameObject go, int index)
+  {
+    yield return new WaitForSeconds(index * 0.4f);
+
+    Instantiate(go, m_spellPositions[index], false);
   }
 }
