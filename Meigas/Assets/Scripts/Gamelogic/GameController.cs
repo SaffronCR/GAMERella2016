@@ -62,6 +62,8 @@ public class GameController : MonoBehaviour
   public GameObject m_spellArrowLeft = null;
   public GameObject m_spellArrowRight = null;
 
+  public TransitionBetweenScenes transitionBetweenScenes;
+
   public Text m_textSouls = null;
   public Text m_textTimer = null;
 
@@ -227,6 +229,11 @@ public class GameController : MonoBehaviour
     PlayerPrefs.SetFloat("score", m_currentScore);
 
     Debug.Log("EndRound");
+
+    if(m_currentRoundTime <= 0f)
+    {
+        transitionBetweenScenes.TransitionToNewScene();
+    }
   }
 
   private void RunRound()
