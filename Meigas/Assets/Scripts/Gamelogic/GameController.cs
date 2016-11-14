@@ -105,7 +105,7 @@ public class GameController : MonoBehaviour
 
   public void AddTimePenalty()
   {
-    Debug.Log("AddTimePenalty");
+    //Debug.Log("AddTimePenalty");
 
     m_meigaAnim.SetTrigger("Attack");
     m_bruxaAnim.SetTrigger("Hit");
@@ -132,7 +132,7 @@ public class GameController : MonoBehaviour
 
   public void AddScore()
   {
-    Debug.Log("AddScore");
+    //Debug.Log("AddScore");
 
     m_bruxaAnim.SetTrigger("Attack");
     m_meigaAnim.SetTrigger("Hit");
@@ -216,7 +216,7 @@ public class GameController : MonoBehaviour
 
   private void InitRound()
   {
-    Debug.Log("InitRound");
+    //Debug.Log("InitRound");
 
     m_currentRoundTime = Time.time + m_roundTime;
     m_currentDifficulty = 0;
@@ -237,7 +237,7 @@ public class GameController : MonoBehaviour
 
     PlayerPrefs.SetFloat("score", m_currentScore);
 
-    Debug.Log("EndRound");
+    //Debug.Log("EndRound");
 
     if (m_currentRoundTime <= 0f)
     {
@@ -275,7 +275,7 @@ public class GameController : MonoBehaviour
     }
     else
     {
-      Debug.LogError("m_currentGR is null!");
+      //Debug.LogError("m_currentGR is null!");
 
       EndRound();
     }
@@ -304,11 +304,11 @@ public class GameController : MonoBehaviour
           else m_currentSpell.keyCodes.Add(KeyCode.LeftArrow);
         }
 
-        Debug.Log("Spell: " + m_currentSpell.spellType);
-        foreach (KeyCode code in m_currentSpell.keyCodes)
-        {
-          Debug.Log("Key: " + code);
-        }
+        //Debug.Log("Spell: " + m_currentSpell.spellType);
+        //foreach (KeyCode code in m_currentSpell.keyCodes)
+        //{
+        //  Debug.Log("Key: " + code);
+        //}
       }
     }
   }
